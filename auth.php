@@ -10,13 +10,12 @@ require_once 'config.php';
 		$pass = $_POST['password'];
 		$remember = $_POST['remember_me'];
 
-
 			if ($email == $dbemail)
 			{
 				$passHash = md5($pass);
 				if($passHash == $dbpass) 
 				{
-					// die('Добро пожаловать!');
+
 				}
 				else {
 					die('Пароль введен неверно');
@@ -26,24 +25,19 @@ require_once 'config.php';
 				die ('Такого пользоватля нет');
 			}
 		}
-		if ($remember == 1) {
-			$expires = time() + (60*60*24*7);
-			setcookie('token', $passHash, $expires , '/');
-			// echo $_COOKIE['token'];
-			die('Куки созданы');
-		}
+	if ($remember == 1) {
+		$expires = time() + (60*60*24*7);
+		setcookie('visitorEmail', $email, $expires , '/');
+		setcookie('visitorPassword', $passHash, $expires , '/');
 
-		else {
-			session_start();
+		echo('COOKIE созданы. Добро пожаловать, ' . $email);
+	}
+	else {
+		session_start();
 
-			$_SESSION['email'] = $email;
-			$_SESSION['pass'] = $pass;
-
-			echo '<pre>';
-			var_dump($_SESSION);
-			echo '</pre>';
-
-			die('Сессия создана');
-		}
+		$_SESSION['visitorEmail'] = $email;
+		$_SESSION['visitorPassword'] = $passHash;
+		echo('Сессия создана. Добро пожаловать, ' . $_SESSION[ID] . ',' . $_SESSION['visitorEmail'] . ',,' . $_SESSION['visitorPassword']);
+	}
 
 ?>
